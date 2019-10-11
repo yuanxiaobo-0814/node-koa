@@ -1,0 +1,19 @@
+{
+  "name": "koa-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/router": "^8.0.1",
+    "koa": "^2.8.2",
+    "koa-bodyparser": "^2.5.0",
+    "koa-logger": "^3.2.1",
+    "koa2-cors": "^2.0.6",
+    "mockjs": "^1.0.1-beta3"
+  }
+}
