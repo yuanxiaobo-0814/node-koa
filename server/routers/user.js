@@ -1,20 +1,43 @@
 const Router = require('@koa/router')
-const Mock = require('mockjs')
+const User = require('../controllers/user')
 
 const router = new Router()
+const user = new User()
 
-let users = Mock.mock({
-  'data|5-20': [
-    {
-      'id|+1': 10,
-      name: '@name'
-    }
-  ]
-})
-
-router.all('/', (ctx, next) => {
-  ctx.body = users
+router.get('/', (ctx, next) => {
+  let { page, count } = ctx.query
+  let result = user.getUserList(page, count)
+  ctx.body = result
   next()
 })
 
+router.get('/:id', (ctx, next) => {
+  let paths = ctx.path.split('/')
+  let id = paths[paths.length - 1]
+  let result = user.getUser(id)
+  ctx.body = result
+  next()
+})
+
+router.post('/', (ctx, next) => {
+  let { name, phone } = ctx.request.body
+  let result = user.addUser(name, user)
+  ctx.body = result
+  next()
+})
+router.delete('/:id', (ctx, next) => {
+  let paths = ctx.path.split('/')
+  let id = paths[paths.length - 1]
+  let result = user.deleteUser(id)
+  ctx.body = result
+  next()
+})
+router.patch('/:id', (ctx, next) => {
+  let paths = ctx.path.split('/')
+  let id = paths[paths.length - 1]
+  let user = ctx.request.body
+  let result = user.updateUser(id, user)
+  ctx.body = result
+  next()
+})
 module.exports = router
