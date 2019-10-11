@@ -6,14 +6,14 @@ class User {
   constructor(ctx) {
     this.data = data
   }
-  getUser() {
+  getUser(id) {
     let arg = arguments[0]
     let result
 
     if (typeof arg === 'number') {
       result = this.data.filter(item => item.id === arg)[0]
     } else if (typeof arg === 'string') {
-      result = this.data.filter(item => item.name === arg)
+      result = this.data.filter(item => item.name === arg)[0]
     }
     return result
   }

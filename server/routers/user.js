@@ -14,6 +14,7 @@ router.get('/', (ctx, next) => {
 router.get('/:id', (ctx, next) => {
   let paths = ctx.path.split('/')
   let id = paths[paths.length - 1]
+  id = parseInt(id)
   let result = user.getUser(id)
   ctx.body = result
   next()
@@ -28,6 +29,7 @@ router.post('/', (ctx, next) => {
 router.delete('/:id', (ctx, next) => {
   let paths = ctx.path.split('/')
   let id = paths[paths.length - 1]
+  id = parseInt(id)
   let result = user.deleteUser(id)
   ctx.body = result
   next()
@@ -35,6 +37,7 @@ router.delete('/:id', (ctx, next) => {
 router.patch('/:id', (ctx, next) => {
   let paths = ctx.path.split('/')
   let id = paths[paths.length - 1]
+  id = parseInt(id)
   let user = ctx.request.body
   let result = user.updateUser(id, user)
   ctx.body = result
