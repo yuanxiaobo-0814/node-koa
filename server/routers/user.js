@@ -6,6 +6,8 @@ const user = new User()
 
 router.get('/', (ctx, next) => {
   let { page, count } = ctx.query
+  page = parseInt(page)
+  count = parseInt(count)
   let result = user.getUserList(page, count)
   ctx.body = result
   next()
@@ -21,8 +23,9 @@ router.get('/:id', (ctx, next) => {
 })
 
 router.post('/', (ctx, next) => {
-  let { name, phone } = ctx.request.body
-  let result = user.addUser(name, user)
+  let { name, phone } = ctx.request.body.data
+  console.log(ctx.request.body)
+  let result = user.addUser(name, phone)
   ctx.body = result
   next()
 })

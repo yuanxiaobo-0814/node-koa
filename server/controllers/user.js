@@ -22,11 +22,11 @@ class User {
       this.data.length % count === 0
         ? this.data.length / count
         : this.data.length / count + 1
-    result = {
+    let result = {
       page,
       count,
-      totalPage,
-      list: this.data.slice((page - 1) * count)
+      totalPage: parseInt(totalPage),
+      list: this.data.slice((page - 1) * count, page * count)
     }
     return result
   }
@@ -85,8 +85,8 @@ class User {
     for (let i = 0, len = this.data.length; i < len; i++) {
       let target = this.data[i]
       if (target.id === id) {
-        this.data.splice(i, 1)
-        return target
+        let result = this.data.splice(i, 1)
+        return result[0]
       }
     }
   }
