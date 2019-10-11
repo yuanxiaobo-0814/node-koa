@@ -21,6 +21,15 @@ app.use(bodyParser())
 // 初始化路由中间件
 app.use(routers.routes()).use(routers.allowedMethods())
 
+app.use((ctx, next) => {
+  let data = ctx.body
+  ctx.body = {
+    status: 200,
+    data,
+    message: 'ok'
+  }
+})
+
 // 监听启动端口
 app.listen(config.PORT)
 console.log(`the server is start at port ${config.PORT}`)
