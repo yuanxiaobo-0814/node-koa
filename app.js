@@ -5,7 +5,6 @@ const bodyParser = require('koa-bodyparser')
 const koaLogger = require('koa-logger')
 const cors = require('koa2-cors')
 
-const config = require('./config')
 const routers = require('./server/routers')
 
 const app = new Koa()

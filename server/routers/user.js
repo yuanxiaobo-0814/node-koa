@@ -2,7 +2,6 @@ const Router = require('@koa/router')
 const  UserController = require('../controllers/user')
 
 const router = new Router()
-const user = new User()
 
 router.get('/', UserController.getUserList)
 
