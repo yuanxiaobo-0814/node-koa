@@ -1,95 +1,118 @@
-// const Mock = require('mockjs')
+const db = require('../../models')
 
-let data = require('../models/user')
+class UserController {
+  static getUser(ctx, next) {
+    let paths = ctx.path.split('/')
+    let id = paths[paths.length - 1]
+    id = parseInt(id)
+    db.User.findAll({
+      where: {
+        id
+      }
+    }).then(users => {
+      ctx.body = users[0]
+      next()
+    })
+  }
+  static getUserList(ctx, next) {
+    let { page, count } = ctx.query
+    page = parseInt(page)
+    count = parseInt(count)
 
-class User {
-  constructor(ctx) {
-    this.data = data
+    db.User.findAll().then(users => {
+      let totalPage =
+        users.length % count === 0
+          ? users.length / count
+          : users.length / count + 1
+      let result = {
+        page,
+        count,
+        totalPage: parseInt(totalPage),
+        list: users.slice((page - 1) * count, page * count)
+      }
+      ctx.body = result
+      next()
+    })
+  }
+  static addUser(ctx, next) {
+    let { username, phone, password } = ctx.request.body.data
+    if (!username) {
+      ctx.body = {
+        message: '请输入用户名'
+      }
+      next()
+      return
+    } else if (!/^1(3|4|5|7|8)\d{9}$/.test(phone)) {
+      ctx.body = {
+        message: '请输入正确的手机号码'
+      }
+      next()
+      return
+    } else if (password.length < 6) {
+      ctx.body = {
+        message: '请输入密码'
+      }
+      next()
+      return
+    }
+    db.User.create({ username, phone, password }).then(user => {
+      ctx.body = user
+      next()
+    })
+  }
+  static updateUser(ctx, next) {
+    let paths = ctx.path.split('/')
+    let id = paths[paths.length - 1]
+    id = parseInt(id)
+    let user = ctx.request.body
+    if (!id && id !== 0) {
+      ctx.body = {
+        message: '请传入用户ID'
+      }
+      next()
+      return
+    }
+    if (user.phone && !/^1(3|4|5|7|8)\d{9}$/.test(phone)) {
+      ctx.body = {
+        message: '请输入正确的手机号码'
+      }
+      next()
+      return
+    }
+    db.User.update(user, {
+      where: {
+        id
+      }
+    }).then(() => {
+      ctx.body = {
+        message: '用户信息更新成功'
+      }
+      next()
+    })
+  }
+   static deleteUser(ctx, next) {
+      let paths = ctx.path.split('/')
+      let id = paths[paths.length - 1]
+      id = parseInt(id)
+      if (!id && id !== 0) {
+        ctx.body = {
+          message: '请传入用户ID'
+        }
+        next()
+        return
+      }
+  
+      db.User.destroy({
+        where: {
+          id
+        }
+      }).then(() => {
+        ctx.body = {
+          message: '用户信息删除成功'
+        }
+        next()
+      })
+    }
   }
-  getUser(id) {
-    let arg = arguments[0]
-    let result
-
-    if (typeof arg === 'number') {
-      result = this.data.filter(item => item.id === arg)[0]
-    } else if (typeof arg === 'string') {
-      result = this.data.filter(item => item.name === arg)[0]
-    }
-    return result
-  }
-  getUserList(page, count) {
-    let totalPage =
-      this.data.length % count === 0
-        ? this.data.length / count
-        : this.data.length / count + 1
-    let result = {
-      page,
-      count,
-      totalPage: parseInt(totalPage),
-      list: this.data.slice((page - 1) * count, page * count)
-    }
-    return result
-  }
-  addUser(name, phone) {
-    let result
-    if (!name) {
-      return {
-        message: '请输入用户名'
-      }
-    } else if (!/^1(3|4|5|7|8)\d{9}$/.test(phone)) {
-      return {
-        message: '请输入正确的手机号码'
-      }
-    }
-    let lastUser = this.data[this.data.length - 1]
-    let user = {
-      name,
-      phone,
-      id: lastUser.id + 1
-    }
-    this.data.push(user)
-
-    return {
-      message: '用户添加成功'
-    }
-  }
-  updateUser(id, user) {
-    if (!id && id !== 0) {
-      return {
-        message: '请传入用户ID'
-      }
-    }
-    if (user.phone && !/^1(3|4|5|7|8)\d{9}$/.test(phone)) {
-      return {
-        message: '请输入正确的手机号码'
-      }
-    }
-    for (let i = 0, len = this.data.length; i < len; i++) {
-      let target = this.data[i]
-      if (target.id === id) {
-        target.name = user.name || target.name
-        target.phone = user.phone || target.phone
-        return {
-          message: '用户信息更新成功'
-        }
-      }
-    }
-  }
-  deleteUser(id) {
-    if (!id && id !== 0) {
-      return {
-        message: '请传入用户ID'
-      }
-    }
-
-    for (let i = 0, len = this.data.length; i < len; i++) {
-      let target = this.data[i]
-      if (target.id === id) {
-        let result = this.data.splice(i, 1)
-        return result[0]
-      }
-    }
-  }
-}
-
-module.exports = User
+  
+  module.exports = UserController

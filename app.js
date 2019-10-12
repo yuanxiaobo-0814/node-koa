@@ -10,6 +10,8 @@ const routers = require('./server/routers')
 
 const app = new Koa()
 
+const PORT=3000
+
 app.use(cors())
 
 // 配置控制台日志中间件
@@ -31,5 +33,5 @@ app.use((ctx, next) => {
 })
 
 // 监听启动端口
-app.listen(config.PORT)
-console.log(`the server is start at port ${config.PORT}`)
+app.listen(PORT)
+console.log(`the server is start at port ${PORT}`)
