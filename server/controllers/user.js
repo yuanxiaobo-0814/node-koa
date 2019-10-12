@@ -35,7 +35,7 @@ class UserController {
     })
   }
   static addUser(ctx, next) {
-    let {firstName,lastName,email} = ctx.request.body.data
+    let {firstName,lastName,email} = ctx.request.body
     if (!firstName) {
       ctx.body = {
         message: '请输入用户姓'
