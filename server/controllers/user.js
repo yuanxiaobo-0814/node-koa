@@ -35,27 +35,27 @@ class UserController {
     })
   }
   static addUser(ctx, next) {
-    let { username, phone, password } = ctx.request.body.data
-    if (!username) {
+    let {firstName,lastName,email} = ctx.request.body.data
+    if (!firstName) {
       ctx.body = {
-        message: '请输入用户名'
+        message: '请输入用户姓'
       }
       next()
       return
-    } else if (!/^1(3|4|5|7|8)\d{9}$/.test(phone)) {
+    }if (!lastName) {
+        ctx.body = {
+          message: '请输入用户名'
+        }
+        next()
+        return
+      } else if (!email) {
       ctx.body = {
-        message: '请输入正确的手机号码'
+        message: '请输入邮箱'
       }
       next()
       return
-    } else if (password.length < 6) {
-      ctx.body = {
-        message: '请输入密码'
-      }
-      next()
-      return
-    }
-    db.User.create({ username, phone, password }).then(user => {
+    } 
+    db.User.create({firstName,lastName,email}).then(user => {
       ctx.body = user
       next()
     })
@@ -68,13 +68,6 @@ class UserController {
     if (!id && id !== 0) {
       ctx.body = {
         message: '请传入用户ID'
-      }
-      next()
-      return
-    }
-    if (user.phone && !/^1(3|4|5|7|8)\d{9}$/.test(phone)) {
-      ctx.body = {
-        message: '请输入正确的手机号码'
       }
       next()
       return
