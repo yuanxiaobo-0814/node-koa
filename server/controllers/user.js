@@ -10,6 +10,7 @@ class UserController {
         id
       }
     }).then(users => {
+      users=JSON.stringify(users, null, 4)
       ctx.body = users[0]
       next()
     })
@@ -20,6 +21,7 @@ class UserController {
     count = parseInt(count)
 
     db.User.findAll().then(users => {
+  users=JSON.stringify(users, null, 4)
       let totalPage =
         users.length % count === 0
           ? users.length / count
