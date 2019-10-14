@@ -5,12 +5,12 @@ class UserController {
     let paths = ctx.path.split('/')
     let id = paths[paths.length - 1]
     id = parseInt(id)
-   await db.User.findAll({
+    await db.User.findAll({
       where: {
         id
       }
     }).then(users => {
-      users =JSON.parse(JSON.stringify(users, null, 4))
+      users = JSON.parse(JSON.stringify(users, null, 4))
       ctx.body = users[0]
       next()
     })
@@ -24,16 +24,22 @@ class UserController {
     count = parseInt(count)
 
     await db.User.findAll().then(users => {
-      users =JSON.parse(JSON.stringify(users, null, 4)) 
-      let totalPage =
-        users.length % count === 0 ?
-        users.length / count :
-        users.length / count + 1
-      let result = {
-        page,
-        count,
-        totalPage: parseInt(totalPage),
-        list: users.slice((page - 1) * count, page * count)
+      users = JSON.parse(JSON.stringify(users, null, 4))
+      let result
+      if (page) {
+        count = count || 10
+        let totalPage =
+          users.length % count === 0 ?
+          users.length / count :
+          users.length / count + 1
+        result = {
+          page,
+          count,
+          totalPage: parseInt(totalPage),
+          list: users.slice((page - 1) * count, page * count)
+        }
+      } else {
+        result = users
       }
       ctx.body = result
       next()
@@ -70,7 +76,7 @@ class UserController {
       lastName,
       email
     }).then(user => {
-      user =JSON.parse(JSON.stringify(user, null, 4))
+      user = JSON.parse(JSON.stringify(user, null, 4))
       ctx.body = user
       next()
     })
